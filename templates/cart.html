@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - University Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/catalog" class="nav-logo">🎓 University Store</a>
+        <div class="nav-menu">
+            <a href="/catalog" class="nav-link">Catalog</a>
+            <a href="/orders" class="nav-link">Orders</a>
+            <a href="/notifications" class="nav-link">Notifications</a>
+            <a href="/cart" class="nav-link cart-link active">
+                🛒 Cart
+                {{if gt .CartCount 0}}
+                <span class="cart-badge">{{.CartCount}}</span>
+                {{end}}
+            </a>
+            <a href="/profile" class="nav-link">{{.UserName}}</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Shopping Cart</h1>
+    </div>
+
+    {{if .Items}}
+    <div class="cart-container">
+        <div class="cart-items">
+            {{range .Items}}
+            <div class="cart-item">
+                <div class="cart-item-image" style="background-image: url('{{.Product.ImageURL}}')"></div>
+                <div class="cart-item-info">
+                    <h3>{{.Product.Name}}</h3>
+                    <p>Size: {{.Size}}</p>
+                    <p class="cart-item-price">${{printf "%.2f" .Product.Price}} each</p>
+                </div>
+                <div class="cart-item-actions">
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="updateQuantity({{.ID}git init}, -1)">-</button>
+                        <input type="number" id="qty-{{.ID}}" value="{{.Quantity}}" min="1" readonly>
+                        <button class="qty-btn" onclick="updateQuantity({{.ID}}, 1)">+</button>
+                    </div>
+                    <p class="cart-item-total">${{printf "%.2f" (multiply .Product.Price .Quantity)}}</p>
+                    <form method="POST" action="/cart/remove" style="margin-top: 10px;">
+                        <input type="hidden" name="item_id" value="{{.ID}}">
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </div>
+            </div>
+            {{end}}
+        </div>
+
+        <div class="cart-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>${{printf "%.2f" .TotalAmount}}</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>Free</span>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <span>${{printf "%.2f" .TotalAmount}}</span>
+            </div>
+            <a href="/checkout" class="btn btn-primary btn-block">Proceed to Checkout</a>
+        </div>
+    </div>
+    {{else}}
+    <div class="empty-state">
+        <p>Your cart is empty</p>
+        <a href="/catalog" class="btn btn-primary">Continue Shopping</a>
+    </div>
+    {{end}}
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+
+<script src="/static/js/cart.js"></script>
+</body>
+</html>

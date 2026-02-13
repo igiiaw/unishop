@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Product.Name}} - University Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/catalog" class="nav-logo">🎓 University Store</a>
+        <div class="nav-menu">
+            <a href="/catalog" class="nav-link">Catalog</a>
+            <a href="/orders" class="nav-link">Orders</a>
+            <a href="/notifications" class="nav-link">Notifications</a>
+            <a href="/cart" class="nav-link cart-link">
+                🛒 Cart
+                {{if gt .CartCount 0}}
+                <span class="cart-badge">{{.CartCount}}</span>
+                {{end}}
+            </a>
+            <a href="/profile" class="nav-link">{{.UserName}}</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <a href="/catalog" class="back-link">← Back to Catalog</a>
+
+    <div class="product-detail">
+        <div class="product-detail-image" style="background-image: url('{{.Product.ImageURL}}')">
+        </div>
+
+        <div class="product-detail-info">
+            <h1>{{.Product.Name}}</h1>
+            {{if and .Product.HighlightEnabled .Product.HighlightText}}
+            <div class="product-highlight-detail">
+                ⚡ {{.Product.HighlightText}}
+            </div>
+            {{end}}
+            <p class="product-detail-price">${{printf "%.2f" .Product.Price}}</p>
+            <p class="product-detail-description">{{.Product.Description}}</p>
+
+            <form method="POST" action="/cart/add" class="product-form">
+                <input type="hidden" name="product_id" value="{{.Product.ID}}">
+
+                <div class="form-group">
+                    <label for="size">Size</label>
+                    <select name="size" id="size" required>
+                        <option value="">Select size</option>
+                        <option value="S">S - Small</option>
+                        <option value="M">M - Medium</option>
+                        <option value="L">L - Large</option>
+                        <option value="XL">XL - Extra Large</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="10">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+</body>
+</html>
