@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications Management - Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar navbar-admin">
+    <div class="nav-container">
+        <a href="/admin" class="nav-logo">🎓 Admin Panel</a>
+        <div class="nav-menu">
+            <a href="/admin" class="nav-link">Dashboard</a>
+            <a href="/admin/products" class="nav-link">Products</a>
+            <a href="/admin/orders" class="nav-link">Orders</a>
+            <a href="/admin/notifications" class="nav-link active">Notifications</a>
+            <a href="/catalog" class="nav-link" target="_blank">Store ↗</a>
+            <a href="/logout" class="nav-link">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Send Notifications</h1>
+        <p>Broadcast messages to all users</p>
+    </div>
+
+    {{if .SuccessMsg}}
+    <div class="alert alert-success">
+        ✓ {{.SuccessMsg}}
+    </div>
+    {{end}}
+
+    <!-- Send Notification Form -->
+    <div class="admin-notification-form-container">
+        <div class="admin-form-card">
+            <h2>📢 Create New Notification</h2>
+            <form method="POST" action="/admin/notifications/send" class="admin-notification-form">
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea
+                            id="message"
+                            name="message"
+                            rows="5"
+                            required
+                            placeholder="Enter your message to all users...&#10;&#10;Example: 🎉 Special Sale! Get 30% off on all hoodies this weekend!"
+                    ></textarea>
+                    <small>This message will be visible to all users in their Notifications page.</small>
+                </div>
+
+
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        📤 Send Notification
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recent Notifications -->
+    <div class="admin-section">
+        <h2>Recent Notifications Sent</h2>
+        {{if .RecentNotifications}}
+        <div class="admin-notifications-list">
+            {{range .RecentNotifications}}
+            <div class="admin-notification-card">
+                <div class="notification-header">
+                        <span class="notification-badge notification-promo">
+                            {{if eq .NotificationType "promo"}}🎉 Promotion{{else}}📢 Announcement{{end}}
+                        </span>
+                    <span class="notification-date">{{.CreatedAt.Format "Jan 2, 2006 at 3:04 PM"}}</span>
+                </div>
+                <p class="notification-message">{{.Message}}</p>
+                <div class="notification-footer">
+                        <span class="notification-scope">
+                            🌐 Global - Visible to all users
+                        </span>
+                </div>
+            </div>
+            {{end}}
+        </div>
+        {{else}}
+        <p class="empty-message">No notifications sent yet. Create your first announcement above!</p>
+        {{end}}
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+</body>
+</html>
