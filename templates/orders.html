@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - University Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/catalog" class="nav-logo"> University Store</a>
+        <div class="nav-menu">
+            <a href="/catalog" class="nav-link">Catalog</a>
+            <a href="/orders" class="nav-link active">Orders</a>
+            <a href="/notifications" class="nav-link">Notifications</a>
+            <a href="/cart" class="nav-link cart-link">
+                 Cart
+                {{if gt .CartCount 0}}
+                <span class="cart-badge">{{.CartCount}}</span>
+                {{end}}
+            </a>
+            <a href="/profile" class="nav-link">{{.UserName}}</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Order History</h1>
+    </div>
+
+    {{if .SuccessMsg}}
+    <div class="alert alert-success">{{.SuccessMsg}}</div>
+    {{end}}
+
+    {{if .Orders}}
+    <div class="orders-list">
+        {{range .Orders}}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <h3>Order #{{.ID}}</h3>
+                    <p class="order-date">{{.CreatedAt.Format "January 2, 2006 at 3:04 PM"}}</p>
+                </div>
+                <div class="order-status">
+                    <span class="status-badge status-completed">{{.Status}}</span>
+                </div>
+            </div>
+
+            <div class="order-items">
+                {{range .Items}}
+                <div class="order-item">
+                    <div class="order-item-info">
+                        <p class="order-item-name">{{.ProductName}}</p>
+                        <p class="order-item-details">Size: {{.Size}} | Quantity: {{.Quantity}}</p>
+                    </div>
+                    <p class="order-item-price">${{printf "%.2f" (multiply .Price .Quantity)}}</p>
+                </div>
+                {{end}}
+            </div>
+
+            <div class="order-delivery-info">
+                <h4>Delivery Information</h4>
+                <p><strong>Address:</strong> {{.DeliveryAddress}}</p>
+                <p><strong>Phone:</strong> {{.PhoneNumber}}</p>
+            </div>
+
+            <div class="order-footer">
+                <p class="order-total">Total: <strong>${{printf "%.2f" .TotalAmount}}</strong></p>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    {{else}}
+    <div class="empty-state">
+        <p>You haven't placed any orders yet</p>
+        <a href="/catalog" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {{end}}
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management - Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar navbar-admin">
+    <div class="nav-container">
+        <a href="/admin" class="nav-logo"> Admin Panel</a>
+        <div class="nav-menu">
+            <a href="/admin" class="nav-link">Dashboard</a>
+            <a href="/admin/products" class="nav-link">Products</a>
+            <a href="/admin/orders" class="nav-link active">Orders</a>
+            <a href="/admin/notifications" class="nav-link">Notifications</a>
+            <a href="/catalog" class="nav-link" target="_blank">Store ↗</a>
+            <a href="/logout" class="nav-link">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>All Orders</h1>
+        <p>Complete order history and customer details</p>
+    </div>
+
+    {{if .Orders}}
+    <div class="admin-orders-list">
+        {{range .Orders}}
+        <div class="admin-order-card">
+            <div class="order-header">
+                <div>
+                    <h3>Order #{{.ID}}</h3>
+                    <p class="order-date">{{.CreatedAt.Format "January 2, 2006 at 3:04 PM"}}</p>
+                </div>
+                <div class="order-status">
+                    <span class="status-badge status-{{.Status}}">{{.Status}}</span>
+                </div>
+            </div>
+
+            <div class="admin-order-customer">
+                <h4>Customer Information</h4>
+                <p><strong>Name:</strong> {{.UserName}}</p>
+                <p><strong>Phone:</strong> {{.PhoneNumber}}</p>
+                <p><strong>Delivery Address:</strong> {{.DeliveryAddress}}</p>
+                <p><strong>Payment Method:</strong> {{.PaymentMethod}}</p>
+            </div>
+
+            <div class="order-items">
+                <h4>Order Items</h4>
+                {{range .Items}}
+                <div class="order-item">
+                    <div class="order-item-info">
+                        <p class="order-item-name">{{.ProductName}}</p>
+                        <p class="order-item-details">Size: {{.Size}} | Quantity: {{.Quantity}}</p>
+                    </div>
+                    <p class="order-item-price">${{printf "%.2f" (multiply .Price .Quantity)}}</p>
+                </div>
+                {{end}}
+            </div>
+
+            <div class="order-footer">
+                <p class="order-total">Total Amount: <strong>${{printf "%.2f" .TotalAmount}}</strong></p>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    {{else}}
+    <div class="empty-state">
+        <p>No orders found</p>
+    </div>
+    {{end}}
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+</body>
+</html>
