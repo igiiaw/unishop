@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - University Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/catalog" class="nav-logo">🎓 University Store</a>
+        <div class="nav-menu">
+            <a href="/catalog" class="nav-link">Catalog</a>
+            <a href="/orders" class="nav-link">Orders</a>
+            <a href="/notifications" class="nav-link">Notifications</a>
+            <a href="/cart" class="nav-link cart-link">
+                🛒 Cart
+                {{if gt .CartCount 0}}
+                <span class="cart-badge">{{.CartCount}}</span>
+                {{end}}
+            </a>
+            <a href="/profile" class="nav-link active">{{.UserName}}</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1>My Profile</h1>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <h2>Account Information</h2>
+            <div class="profile-info">
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">{{.User.Name}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{.User.Email}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Member Since:</span>
+                    <span class="info-value">{{.User.CreatedAt.Format "January 2, 2006"}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Orders:</span>
+                    <span class="info-value">{{.OrderCount}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h2>Quick Actions</h2>
+            <div class="profile-actions">
+                <a href="/orders" class="btn btn-secondary btn-block">View Order History</a>
+                <a href="/notifications" class="btn btn-secondary btn-block">View Notifications</a>
+                <a href="/catalog" class="btn btn-secondary btn-block">Continue Shopping</a>
+                <form method="POST" action="/logout" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-danger btn-block">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2026 University Merchandise Store. All rights reserved.</p>
+</footer>
+</body>
+</html>
